@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velki123.cc — Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0c0c;
+      --card-bg: #161616;
+      --border: #2a2a2a;
+      --text: #ffffff;
+      --text-muted: #888888;
+      --accent: #ccff00;
+      --accent-hover: #b3e600;
+      --error: #ff4444;
+      --success: #00cc66;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Hind Siliguri', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .header h1 span {
+      color: var(--accent);
+    }
+    .header p {
+      color: var(--text-muted);
+      margin: 8px 0 0 0;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus {
+      border-color: var(--accent);
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: var(--accent-hover);
+    }
+    button:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+    }
+    .message.error {
+      background: rgba(255, 68, 68, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(255, 68, 68, 0.2);
+      display: block;
+    }
+    .message.success {
+      background: rgba(0, 204, 102, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(0, 204, 102, 0.2);
+      display: block;
+    }
+    
+    /* Login & Dashboard Switch */
+    #dashboard-section { display: none; }
+    
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Velki123<span>.</span>cc</h1>
+      <p>অ্যাডমিন প্যানেল</p>
+    </div>
+
+    <!-- Login Section -->
+    <div id="login-section">
+      <div class="form-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="password" placeholder="অ্যাডমিন পাসওয়ার্ড দিন" />
+      </div>
+      <button id="login-btn">লগইন করুন</button>
+      <div id="login-msg" class="message"></div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section">
+      <div class="form-group">
+        <label>WhatsApp নাম্বার</label>
+        <input type="text" id="wa-number" placeholder="যেমন: 916382583846" />
+      </div>
+      <div class="form-group">
+        <label>Facebook লিংক</label>
+        <input type="text" id="fb-link" placeholder="যেমন: https://www.facebook.com/username" />
+      </div>
+      <button id="save-btn">সেভ করুন</button>
+      <div id="save-msg" class="message"></div>
+    </div>
+  </div>
+
+  <script>
+    let authToken = '';
+
+    const loginBtn = document.getElementById('login-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const loginSection = document.getElementById('login-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const loginMsg = document.getElementById('login-msg');
+    const saveMsg = document.getElementById('save-msg');
+
+    function showMsg(element, type, text) {
+      element.className = 'message ' + type;
+      element.textContent = text;
+      setTimeout(() => {
+        element.style.display = 'none';
+        element.className = 'message';
+      }, 5000);
+    }
+
+    // Handle Login
+    loginBtn.addEventListener('click', async () => {
+      const pwd = document.getElementById('password').value;
+      if (!pwd) return showMsg(loginMsg, 'error', 'পাসওয়ার্ড দিন!');
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'অপেক্ষা করুন...';
+
+      try {
+        const res = await fetch('/api/config?action=verify', {
+          headers: { 'Authorization': 'Bearer ' + pwd }
+        });
+
+        const contentType = res.headers.get("content-type");
+        if (res.ok && contentType && contentType.indexOf("application/json") !== -1) {
+          authToken = pwd;
+          loginSection.style.display = 'none';
+          dashboardSection.style.display = 'block';
+          loadData();
+        } else if (res.ok) {
+           showMsg(loginMsg, 'error', 'API কাজ করছে না! functions ফোল্ডারটি আপলোড হয়নি।');
+        } else {
+          showMsg(loginMsg, 'error', 'ভুল পাসওয়ার্ড!');
+        }
+      } catch (err) {
+        showMsg(loginMsg, 'error', 'সার্ভার এরর!');
+      }
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'লগইন করুন';
+    });
+
+    // Load Data
+    async function loadData() {
+      try {
+        const res = await fetch('/api/config');
+        const contentType = res.headers.get("content-type");
+        if (res.ok && contentType && contentType.indexOf("application/json") !== -1) {
+          const data = await res.json();
+          if (data.whatsappNumber) document.getElementById('wa-number').value = data.whatsappNumber;
+          if (data.messengerLink) document.getElementById('fb-link').value = data.messengerLink;
+        } else {
+          throw new Error('API did not return JSON. Function might not be deployed.');
+        }
+      } catch (err) {
+        console.error(err);
+        showMsg(saveMsg, 'error', 'API ফাংশনটি ঠিকমতো ডেপ্লয় হয়নি! Cloudflare-এ functions ফোল্ডারটি আপলোড হয়েছে কিনা চেক করুন।');
+      }
+    }
+
+    // Save Data
+    saveBtn.addEventListener('click', async () => {
+      const waNumber = document.getElementById('wa-number').value.trim();
+      const fbLink = document.getElementById('fb-link').value.trim();
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'সেভ হচ্ছে...';
+
+      try {
+        const res = await fetch('/api/config', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + authToken
+          },
+          body: JSON.stringify({
+            whatsappNumber: waNumber,
+            messengerLink: fbLink
+          })
+        });
+
+        if (res.ok) {
+          showMsg(saveMsg, 'success', 'সফলভাবে সেভ হয়েছে!');
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          if (errData.error === 'KV Namespace not bound') {
+            showMsg(saveMsg, 'error', 'Cloudflare-এ MUSAA_CONFIG নামে KV Namespace যুক্ত করা হয়নি!');
+          } else {
+            showMsg(saveMsg, 'error', 'সেভ করতে সমস্যা হয়েছে: ' + (errData.error || 'অজানা এরর'));
+          }
+        }
+      } catch (err) {
+        showMsg(saveMsg, 'error', 'সার্ভার এরর!');
+      }
+
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'সেভ করুন';
+    });
+  </script>
+</body>
+</html>

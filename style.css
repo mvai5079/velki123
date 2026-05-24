@@ -1,0 +1,653 @@
+/* ============================================
+   Velki123.cc — Neo-Brutalist Contact Page
+   style.css
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Bebas+Neue&family=DM+Mono:wght@400;500;700&display=swap');
+
+/* ─── Reset & Variables ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black: #080808;
+  --cream: #f2ede3;
+  --wa-green: #00d84b;
+  --fb-blue: #006eff;
+  --accent: #ff3c00;
+  --yellow: #ffe500;
+  --border-w: 3px;
+  --border: var(--border-w) solid var(--black);
+  --shadow-sm: 5px 5px 0 var(--black);
+  --shadow-md: 8px 8px 0 var(--black);
+  --shadow-lg: 12px 12px 0 var(--black);
+}
+
+/* ─── Keyframes ─── */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes badge-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+}
+
+@keyframes icon-wiggle {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  40% {
+    transform: rotate(7deg) scale(1.05);
+  }
+
+  60% {
+    transform: rotate(-4deg);
+  }
+
+  80% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes wa-glow {
+
+  0%,
+  100% {
+    box-shadow: var(--shadow-sm), 0 0 0 0 rgba(0, 216, 75, 0);
+  }
+
+  50% {
+    box-shadow: var(--shadow-md), 0 0 0 8px rgba(0, 216, 75, 0.15);
+  }
+}
+
+@keyframes fb-glow {
+
+  0%,
+  100% {
+    box-shadow: var(--shadow-sm), 0 0 0 0 rgba(0, 110, 255, 0);
+  }
+
+  50% {
+    box-shadow: var(--shadow-md), 0 0 0 8px rgba(0, 110, 255, 0.15);
+  }
+}
+
+@keyframes noise {
+  0% {
+    background-position: 0 0;
+  }
+
+  25% {
+    background-position: 3px -3px;
+  }
+
+  50% {
+    background-position: -3px 3px;
+  }
+
+  75% {
+    background-position: 3px 3px;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes dot-blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes ripple-out {
+  from {
+    transform: scale(0);
+    opacity: 0.35;
+  }
+
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes stripe-move {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 40px 0;
+  }
+}
+
+/* ─── Base ─── */
+html,
+body {
+  height: 100%;
+  background: var(--cream);
+  color: var(--black);
+  font-family: 'Hind Siliguri', sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  animation: noise 0.5s steps(1) infinite;
+}
+
+/* ─── Ticker ─── */
+.ticker {
+  width: 100%;
+  background: #ccff00;
+  color: var(--black);
+  border-bottom: var(--border);
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.ticker::before,
+.ticker::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 2;
+}
+
+.ticker::before {
+  left: 0;
+  background: linear-gradient(to right, #ccff00, transparent);
+}
+
+.ticker::after {
+  right: 0;
+  background: linear-gradient(to left, #ccff00, transparent);
+}
+
+.ticker-track {
+  display: inline-block;
+  animation: ticker-scroll 22s linear infinite;
+}
+
+.ticker-track span {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0 1.8rem;
+}
+
+.ticker-track .sep {
+  color: var(--black);
+  font-size: 16px;
+}
+
+/* ─── Main ─── */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  min-height: 0;
+}
+
+/* ─── Profile Image ─── */
+.profile-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -5rem;
+  margin-bottom: 3rem;
+  animation: fade-up 0.4s 0s ease both;
+}
+
+.profile-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--black);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Top Strip ─── */
+.top-strip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  animation: fade-up 0.4s 0.05s ease both;
+}
+
+.site-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.live-dot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+}
+
+.live-dot::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dot-blink 1.2s ease-in-out infinite;
+}
+
+/* ─── Hero ─── */
+.hero {
+  width: 100%;
+  margin-bottom: 2.5rem;
+  animation: fade-up 0.4s 0.1s ease both;
+}
+
+.brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 18vw, 96px);
+  line-height: 0.88;
+  letter-spacing: 7px;
+  color: var(--black);
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+}
+
+.brand-name .accent-dot {
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 600;
+  color: #444;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-sub em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+
+
+/* ─── Buttons ─── */
+.buttons-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.btn {
+  position: relative;
+  display: block;
+  flex: 1;
+  text-decoration: none;
+  color: var(--black);
+  border: 0.4px solid var(--black);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+  overflow: hidden;
+  padding: 0.8rem 0.8rem 0.8rem 1.8rem;
+}
+
+.btn:hover {
+  transform: translate(-3px, -3px);
+}
+
+.btn:active {
+  transform: translate(4px, 4px) !important;
+}
+
+/* Animated stripe on hover */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background-image: repeating-linear-gradient(90deg,
+      transparent 0px,
+      transparent 8px,
+      rgba(0, 0, 0, 0.04) 8px,
+      rgba(0, 0, 0, 0.04) 16px);
+  background-size: 40px 100%;
+  animation: stripe-move 0.6s linear infinite;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--black);
+  background: transparent;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon-wrap svg {
+  animation: icon-wiggle 3s ease-in-out infinite;
+}
+
+.btn-text {
+  flex: 1;
+}
+
+.btn-label {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+
+
+/* WhatsApp */
+.btn-whatsapp {
+  background: #25D366;
+  color: #ffffff;
+  animation: fade-up 0.4s 0.2s ease both;
+}
+
+.btn-whatsapp .btn-icon-wrap {
+  background: #ffffff;
+}
+
+.btn-whatsapp .btn-icon-wrap svg {
+  animation-delay: 0s;
+}
+
+
+
+/* Facebook */
+.btn-facebook {
+  background: #1877F2;
+  color: #ffffff;
+  animation: fade-up 0.4s 0.3s ease both;
+}
+
+.btn-facebook .btn-icon-wrap {
+  background: #ffffff;
+}
+
+.btn-facebook .btn-icon-wrap svg {
+  animation-delay: 0.6s;
+}
+
+
+
+/* YouTube */
+.btn-youtube {
+  background: #FF0000;
+  color: #ffffff;
+  animation: fade-up 0.4s 0.4s ease both;
+}
+
+.btn-youtube .btn-icon-wrap {
+  background: #ffffff;
+}
+
+.btn-youtube .btn-icon-wrap svg {
+  animation-delay: 1.2s;
+}
+
+/* QR Code */
+.btn-qrcode {
+  background: var(--black);
+  color: #ffffff;
+  animation: fade-up 0.4s 0.5s ease both;
+}
+
+.btn-qrcode .btn-icon-wrap {
+  background: #ffffff;
+}
+
+.btn-qrcode .btn-icon-wrap svg {
+  animation-delay: 1.8s;
+}
+
+/* ─── Popup ─── */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 8, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 1.5rem;
+}
+
+.popup-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  background: var(--cream);
+  padding: 1.5rem;
+  border: var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.popup-overlay.active .popup-content {
+  transform: scale(1);
+}
+
+.popup-close {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: var(--accent);
+  color: #fff;
+  border: var(--border);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.popup-close:hover {
+  transform: scale(1.1);
+}
+
+.popup-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--black);
+}
+
+/* ─── Ripple ─── */
+.ripple-el {
+  position: absolute;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  margin-left: -30px;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.1);
+  animation: ripple-out 0.7s ease-out forwards;
+}
+
+
+
+/* ─── Footer ─── */
+footer {
+  width: 100%;
+  background: var(--black);
+  border-top: var(--border);
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  animation: fade-up 0.4s 0.5s ease both;
+}
+
+.foot-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #ccff00;
+}
+
+.foot-brand span {
+  color: var(--accent);
+}
+
+.foot-sep {
+  color: #444;
+  font-size: 18px;
+}
+
+.foot-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #666;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 380px) {
+  .brand-name {
+    font-size: 44px;
+  }
+
+  .btn {
+    padding: 0.85rem 1rem;
+  }
+
+  .btn-icon-wrap {
+    width: 44px;
+    height: 44px;
+  }
+
+  .btn-inner {
+    gap: 10px;
+  }
+}
