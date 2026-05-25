@@ -148,7 +148,7 @@
     <div id="dashboard-section">
       <div class="form-group">
         <label>WhatsApp নাম্বার</label>
-        <input type="text" id="wa-number" placeholder="যেমন: 916382583846" />
+        <input type="text" id="wa-number" placeholder="যেমন: 910000000000" />
       </div>
       <div class="form-group">
         <label>Facebook লিংক</label>
@@ -254,7 +254,7 @@
         } else {
           const errData = await res.json().catch(() => ({}));
           if (errData.error === 'KV Namespace not bound') {
-            showMsg(saveMsg, 'error', 'Cloudflare-এ MUSAA_CONFIG নামে KV Namespace যুক্ত করা হয়নি!');
+            showMsg(saveMsg, 'error', 'Cloudflare-এ VELKI123_CONFIG নামে KV Namespace যুক্ত করা হয়নি!');
           } else {
             showMsg(saveMsg, 'error', 'সেভ করতে সমস্যা হয়েছে: ' + (errData.error || 'অজানা এরর'));
           }

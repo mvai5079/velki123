@@ -4,7 +4,7 @@ export async function onRequest(context) {
 
   // Hardcoded Admin Password
   // In a real app, use environment variables, but for simplicity here we hardcode it.
-  const ADMIN_PASSWORD = env.ADMIN_PASSWORD || 'musa123'; // The client should use this to login
+  const ADMIN_PASSWORD = env.ADMIN_PASSWORD || 'velki9900'; // The client should use this to login
 
   // Helper to handle CORS if needed
   const headers = {
@@ -24,13 +24,13 @@ export async function onRequest(context) {
 
     // Return the current config
     let config = {
-      whatsappNumber: "916382583846",
+      whatsappNumber: "",
       messengerLink: "https://www.facebook.com/170687"
     };
 
     try {
-      if (env.MUSAA_CONFIG) {
-        const stored = await env.MUSAA_CONFIG.get('contact_links', { type: 'json' });
+      if (env.VELKI123_CONFIG) {
+        const stored = await env.VELKI123_CONFIG.get('contact_links', { type: 'json' });
         if (stored) {
           config = stored;
         }
@@ -51,11 +51,11 @@ export async function onRequest(context) {
     try {
       const data = await request.json();
       
-      if (!env.MUSAA_CONFIG) {
+      if (!env.VELKI123_CONFIG) {
         return new Response(JSON.stringify({ error: 'KV Namespace not bound' }), { status: 500, headers });
       }
 
-      await env.MUSAA_CONFIG.put('contact_links', JSON.stringify({
+      await env.VELKI123_CONFIG.put('contact_links', JSON.stringify({
         whatsappNumber: data.whatsappNumber || "",
         messengerLink: data.messengerLink || ""
       }));
