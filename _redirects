@@ -1,0 +1,13 @@
+# Redirects for Cloudflare Pages
+# Redirect www to non-www (canonical URL)
+https://www.velki123.cc/* https://velki123.cc/:splat 301
+
+# Redirect common variations
+/home /  301
+/index /  301
+/index.html /  301
+/contact /  301
+
+# Block access to sensitive paths
+/functions/* /  302
+/api/config  /  302

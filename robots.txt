@@ -1,0 +1,41 @@
+# Robots.txt for velki123.cc
+# Last updated: 2026-06-24
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /functions/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://velki123.cc/sitemap.xml
+
+# Crawl-delay (optional, for polite crawling)
+Crawl-delay: 1
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /functions/
+Disallow: /api/
+
+# Bing specific
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /functions/
+Disallow: /api/
+
+# Block AI training bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
